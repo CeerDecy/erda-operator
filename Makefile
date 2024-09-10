@@ -13,6 +13,7 @@
 
 GO_PROJECT_ROOT := github.com/erda-project/erda
 ARCH ?= amd64
+PLATFORM ?= linux/amd64,linux/arm64
 
 REGISTRY ?= registry.erda.cloud/erda
 VERSION ?= $(shell cat ./VERSION)
@@ -31,7 +32,7 @@ else
 endif
 
 build-version:
-	@echo Arch: ${ARCH}
+	@echo Arch: ${PLATFORM}
 	@echo Version: ${VERSION}
 	@echo Build Time: ${BUILD_TIME}
 	@echo Git Commit: ${GIT_COMMIT}
@@ -43,18 +44,12 @@ build: build-version
 	@echo "build dice-operator"
 	@CGO_ENABLED=0 GOARCH=${ARCH} go build -o bin/dice-operator-${ARCH} ./cmd/dice-operator
 
-docker-build: build-version
-	@docker build -t $(IMAGE)	\
-	  --build-arg ARCH=$(ARCH) \
+docker-build-push: build-version
+	@docker buildx create --use --platform $(PLATFORM) --driver docker-container
+	@docker buildx build \
+	  --push \
+	  --platform  $(PLATFORM)\
+	  -t $(IMAGE) \
+	  -t $(IMAGE_VERSION_LATEST) \
 	  --build-arg GO_PROJECT_ROOT=$(GO_PROJECT_ROOT) \
 	  --build-arg GO_PROXY=$(GO_PROXY) .
-
-docker-build-push: docker-build
-	@docker push $(IMAGE)
-	@echo action meta: image=$(IMAGE)
-
-docker-version-latest: docker-build-push
-	@echo "retag image $(IMAGE) to $(IMAGE_VERSION_LATEST)"
-	@docker tag $(IMAGE) $(IMAGE_VERSION_LATEST)
-	@docker push $(IMAGE_VERSION_LATEST)
-	@echo action meta: image_version_latest=$(IMAGE_VERSION_LATEST)

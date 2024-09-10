@@ -24,7 +24,7 @@ stages:
           commands:
             - cd ${{ dirs.erda-operator }}
             - docker login ${{ configs.docker_registry }} -u ${{ configs.docker_registry_username }} -p ${{ configs.docker_registry_password }}
-            - REGISTRY=${{ configs.docker_registry }} IMAGE_TAG=${{ outputs.extract-repo-version.image_tag }} make docker-version-latest
+            - REGISTRY=${{ configs.docker_registry }} IMAGE_TAG=${{ outputs.extract-repo-version.image_tag }} make docker-build-push
           resources:
             cpu: 2
             mem: 2048
