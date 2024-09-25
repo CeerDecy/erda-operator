@@ -27,3 +27,4 @@ stages:
           resources:
             cpu: 2
             mem: 2048
+          image: registry.cn-hangzhou.aliyuncs.com/ceerdecy/custom-script-action:latest
