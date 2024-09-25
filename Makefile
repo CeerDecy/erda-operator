@@ -45,7 +45,6 @@ build: build-version
 	@CGO_ENABLED=0 GOARCH=${ARCH} go build -o bin/dice-operator-${ARCH} ./cmd/dice-operator
 
 docker-build-push: build-version
-	@docker buildx create --use --platform $(PLATFORM) --driver docker-container
 	@docker buildx build \
 	  --push \
 	  --platform  $(PLATFORM)\
