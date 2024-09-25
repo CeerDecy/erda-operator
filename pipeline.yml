@@ -23,6 +23,9 @@ stages:
           alias: dockerfile
           version: "1.0"
           params:
+            build_args:
+              GO_PROJECT_ROOT: "github.com/erda-project/erda"
+              GO_PROXY: "https://goproxy.cn,direct"
             image:
               name: erda-operator
               tag: ${{ outputs.extract-repo-version.image_tag }}
