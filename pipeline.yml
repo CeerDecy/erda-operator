@@ -19,12 +19,16 @@ stages:
           params:
             git_dir: ${{ dirs.erda-operator }}
   - stage:
-      - custom-script:
-          alias: build-erda-operator
-          commands:
-            - cd ${{ dirs.erda-operator }}
-            - REGISTRY=registry.cn-hangzhou.aliyuncs.com/ceerdecy IMAGE_TAG=latest make docker-build-push
-          resources:
-            cpu: 2
-            mem: 2048
-          image: registry.cn-hangzhou.aliyuncs.com/ceerdecy/custom-script-action:latest
+      - dockerfile:
+          alias: dockerfile
+          version: "1.0"
+          params:
+            image:
+              name: erda-operator
+              tag: ${{ outputs.extract-repo-version.image_tag }}
+            path: ${{ dirs.erda-operator }}/Dockerfile
+            registry:
+              password: ${{ configs.docker_registry_password }}
+              url: ${{ configs.docker_registry }}
+              username: ${{ configs.docker_registry_username }}
+            workdir: ${{ dirs.erda-operator }}
