@@ -1,0 +1,10 @@
+jobs: {}
+services:
+  dice-operator:
+    deployments:
+      replicas: 0
+    image: registry.cn-shanghai.aliyuncs.com/viper/dice-operator:2.4-alpha-20231011171508-bae7153
+    resources:
+      cpu: 0.1
+      mem: 128
+version: "2.0"
