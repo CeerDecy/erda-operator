@@ -37,7 +37,7 @@ stages:
             workdir: ${{ dirs.erda-operator }}
   - stage:
       - release:
-          alias: release-ui
+          alias: release-erda-operator
           description: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
           version: "1.0"
           params:
