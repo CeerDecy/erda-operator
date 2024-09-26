@@ -19,6 +19,13 @@ stages:
           params:
             git_dir: ${{ dirs.erda-operator }}
   - stage:
+      - custom-script:
+          alias: custom-script
+          version: "1.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:1.0-20230323150154-cd653f3
+          commands:
+            - sleep 100000
+  - stage:
       - dockerfile:
           alias: dockerfile
           version: "1.0"
