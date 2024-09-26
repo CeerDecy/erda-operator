@@ -35,3 +35,12 @@ stages:
               url: ${{ configs.docker_registry }}
               username: ${{ configs.docker_registry_username }}
             workdir: ${{ dirs.erda-operator }}
+  - stage:
+      - release:
+          alias: release-erda-operator
+          description: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
+          version: "1.0"
+          params:
+            image:
+              erda-operator: ${{ outputs.dockerfile.image }}
+            tag_version: ${{ outputs.extract-repo-version.version }}
