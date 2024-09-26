@@ -19,12 +19,19 @@ stages:
           params:
             git_dir: ${{ dirs.erda-operator }}
   - stage:
-      - custom-script:
-          alias: build-erda-operator
-          commands:
-            - cd ${{ dirs.erda-operator }}
-            - docker login ${{ configs.docker_registry }} -u ${{ configs.docker_registry_username }} -p ${{ configs.docker_registry_password }}
-            - REGISTRY=${{ configs.docker_registry }} IMAGE_TAG=${{ outputs.extract-repo-version.image_tag }} make docker-build-push
-          resources:
-            cpu: 2
-            mem: 2048
+      - dockerfile:
+          alias: dockerfile
+          version: "1.0"
+          params:
+            build_args:
+              GO_PROJECT_ROOT: "github.com/erda-project/erda"
+              GO_PROXY: "https://goproxy.cn,direct"
+            image:
+              name: erda-operator
+              tag: ${{ outputs.extract-repo-version.image_tag }}
+            path: ${{ dirs.erda-operator }}/Dockerfile
+            registry:
+              password: ${{ configs.docker_registry_password }}
+              url: ${{ configs.docker_registry }}
+              username: ${{ configs.docker_registry_username }}
+            workdir: ${{ dirs.erda-operator }}
