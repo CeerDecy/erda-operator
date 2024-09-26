@@ -1,0 +1,9 @@
+jobs: {}
+services:
+  dice-operator:
+    deployments:
+      replicas: 0
+    resources:
+      cpu: 0.1
+      mem: 128
+version: "2.0"
